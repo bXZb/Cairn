@@ -1,6 +1,9 @@
 FROM --platform=amd64 kalilinux/kali-rolling:latest
 
-RUN apt update && \
+# Pin apt to Kali's own CDN: the http.kali.org redirector intermittently hands out dead mirrors and fails the build
+RUN sed -i 's|http://http.kali.org/kali|http://kali.download/kali|' /etc/apt/sources.list.d/kali.sources && \
+    echo 'Acquire::Retries "3";' > /etc/apt/apt.conf.d/80-retries && \
+    apt update && \
     apt -y install kali-linux-headless && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*

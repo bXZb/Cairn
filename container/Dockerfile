@@ -16,10 +16,9 @@ RUN sudo apt update && \
     sudo apt install -y bsdextrautils npm jq iputils-ping sshpass ncat rlwrap \
     bloodyad coercer enum4linux-ng pwncat chisel-common-binaries \
     dirsearch yq krb5-user gitleaks naabu nikto netexec adb \
-    cmake build-essential && \
+    cmake build-essential python3-pwntools python3-pymongo && \
     sudo apt clean && \
     sudo rm -rf /var/lib/apt/lists/* && \
-    pip3 install pwntools pymongo --break-system-packages && \
     sudo npm install -g @playwright/cli@latest && \
     cd /tmp && playwright-cli install
 

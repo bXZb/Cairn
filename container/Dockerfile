@@ -68,9 +68,9 @@ RUN cd /tmp && \
 RUN pip3 install tccli awscli --break-system-packages && \
     sudo bash -c "$(curl -fsSL https://aliyuncli.alicdn.com/install.sh)"
 
-RUN sudo npm install -g @openai/codex@0.166.0
-RUN sudo npm install -g @anthropic-ai/claude-code@2.1.312
-RUN sudo npm install -g @mariozechner/pi-coding-agent@0.73.1
+RUN sudo npm install -g @openai/codex@latest
+RUN sudo npm install -g @anthropic-ai/claude-code@latest
+RUN sudo npm install -g @mariozechner/pi-coding-agent@latest
 
 RUN sudo chmod +x /usr/local/bin/kerbrute
 RUN mkdir -p /home/kali/.config/nuclei && \

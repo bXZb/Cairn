@@ -5,6 +5,7 @@ RUN sed -i 's|http://http.kali.org/kali|http://kali.download/kali|' /etc/apt/sou
     echo 'Acquire::Retries "3";' > /etc/apt/apt.conf.d/80-retries && \
     apt update && \
     apt -y install kali-linux-headless && \
+    rm -rf /usr/lib/llvm-*/build && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -67,9 +68,9 @@ RUN cd /tmp && \
 RUN pip3 install tccli awscli --break-system-packages && \
     sudo bash -c "$(curl -fsSL https://aliyuncli.alicdn.com/install.sh)"
 
-RUN sudo npm install -g @openai/codex@0.118.0
-RUN sudo npm install -g @anthropic-ai/claude-code@2.1.98
-RUN sudo npm install -g @mariozechner/pi-coding-agent@0.73.0
+RUN sudo npm install -g @openai/codex@0.166.0
+RUN sudo npm install -g @anthropic-ai/claude-code@2.1.312
+RUN sudo npm install -g @mariozechner/pi-coding-agent@0.73.1
 
 RUN sudo chmod +x /usr/local/bin/kerbrute
 RUN mkdir -p /home/kali/.config/nuclei && \
@@ -77,8 +78,7 @@ RUN mkdir -p /home/kali/.config/nuclei && \
     echo "disable-update-check: true" >> /home/kali/.config/nuclei/config.yaml && \
     echo "update-template-dir: /home/kali/.local/nuclei-templates" >> /home/kali/.config/nuclei/config.yaml && \
     rm -rf /home/kali/nuclei-templates
-RUN sudo rm -rf /usr/lib/llvm-*/build && \
-    sudo chmod o+rx /usr/lib/mysql/plugin/auth_pam_tool_dir /etc/ssl/private
+RUN sudo chmod o+rx /usr/lib/mysql/plugin/auth_pam_tool_dir /etc/ssl/private
 RUN printf '%s\n' 'PS1="${PS1%\\n*} \[\033[0;36m\]\D{%y-%m-%d} - \t\[\033[;32m\]\n${PS1##*\\n}"' >> /home/kali/.bashrc && \
     mkdir -p /home/kali/workspace && cd /home/kali/workspace && git init
 ENV TZ=Asia/Shanghai

@@ -41,3 +41,8 @@ jobs:
           tags: ghcr.io/${{ env.IMAGE_OWNER_LC }}/cairn-worker-container:latest
           cache-from: type=registry,ref=ghcr.io/${{ env.IMAGE_OWNER_LC }}/cairn-worker-container:buildcache
           cache-to: type=registry,ref=ghcr.io/${{ env.IMAGE_OWNER_LC }}/cairn-worker-container:buildcache,mode=max
+
+      - name: Smoke test agent CLIs
+        run: |
+          docker run --rm ghcr.io/${{ env.IMAGE_OWNER_LC }}/cairn-worker-container:latest \
+            bash -c 'claude --version && codex --version && pi --version'

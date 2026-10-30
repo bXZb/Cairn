@@ -68,13 +68,12 @@ RUN cd /tmp && \
 RUN pip3 install tccli awscli --break-system-packages && \
     sudo bash -c "$(curl -fsSL https://aliyuncli.alicdn.com/install.sh)"
 
-RUN sudo npm install -g @openai/codex@latest
-# Newer claude-code ships a postinstall (install.cjs) that fetches its native binary;
-# it does not run in this image, so execute it explicitly and verify all three CLIs
-RUN sudo npm install -g @anthropic-ai/claude-code@latest && \
-    sudo node "$(sudo npm root -g)/@anthropic-ai/claude-code/install.cjs" && \
-    claude --version && codex --version && pi --version
-RUN sudo npm install -g @mariozechner/pi-coding-agent@latest
+# npm now blocks third-party lifecycle scripts by default; allow them so
+# claude-code's postinstall (install.cjs) can fetch its native binary
+RUN sudo npm config set dangerously-allow-all-scripts true -g
+RUN sudo npm install -g @openai/codex@latest && codex --version
+RUN sudo npm install -g @anthropic-ai/claude-code@latest && claude --version
+RUN sudo npm install -g @mariozechner/pi-coding-agent@latest && pi --version
 
 RUN sudo chmod +x /usr/local/bin/kerbrute
 RUN mkdir -p /home/kali/.config/nuclei && \

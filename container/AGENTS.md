@@ -1,11 +1,11 @@
 # 环境介绍
-* 当前环境是一个**精简版 Kali 容器**（kali-rolling 基础镜像），只预装了基础工具链（git、curl、node、tmux 等）和一个编码 Agent CLI，**渗透工具基本没有预装**
+* 当前环境是一个**精简版 Kali 容器**（kali-rolling 基础镜像），预装了基础工具链（git、curl/wget、python3+pip、jq、file、unzip/zip、nc、ssh/scp、dig、ss/ip、ripgrep/fd、tmux 等）和一个编码 Agent CLI，**渗透工具（nmap/sqlmap 等）没有预装**
 * 当前目录是解题工作空间，可以用于保存命令执行日志、较大的扫描结果等
 
 # 按需安装（重要）
 * 遇到 `command not found` 时不要放弃，直接安装后重试（免密 sudo 已配置，Kali 仓库工具非常齐全）：
   * 渗透工具：`sudo apt update && sudo apt install -y <pkg>`，例如 nmap、sqlmap、nikto、gobuster、impacket-*、chisel、netexec 等
-  * Python 工具：`sudo apt install -y python3 python3-pip` 之后 `pip3 install <pkg> --break-system-packages`
+  * Python 工具：`pip3 install <pkg> --break-system-packages`（python3 和 pip 已预装）
   * Node 工具：`npm install -g <pkg>`
 * 安装前先评估耗时，任务时间预算有限：小工具直接装；明显要装很久的（带大量依赖的），优先换更轻的等价工具或手写脚本
 * 单次下载/安装卡住超过一两分钟就果断换方案，不要反复重试

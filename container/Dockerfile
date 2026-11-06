@@ -17,7 +17,13 @@ ENV TZ=Asia/Shanghai \
 RUN sed -i 's|http://http.kali.org/kali|http://kali.download/kali|' /etc/apt/sources.list.d/kali.sources && \
     echo 'Acquire::Retries "3";' > /etc/apt/apt.conf.d/80-retries && \
     apt update && \
-    apt -y install --no-install-recommends ca-certificates curl git nodejs npm sudo passwd procps tmux && \
+    apt -y install --no-install-recommends \
+        ca-certificates curl wget git jq file unzip zip \
+        nodejs npm sudo passwd procps tmux rlwrap \
+        python3 python3-pip python3-requests \
+        netcat-openbsd iproute2 net-tools bind9-dnsutils \
+        openssh-client sshpass \
+        ripgrep fd-find && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
 

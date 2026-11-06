@@ -2,6 +2,15 @@ name: Build And Publish Container
 
 on:
   workflow_dispatch:
+    inputs:
+      agent:
+        description: "Agent CLI baked into the image"
+        type: choice
+        default: claudecode
+        options:
+          - claudecode
+          - codex
+          - pi
   push:
     branches:
       - main
@@ -10,6 +19,9 @@ on:
 
 permissions:
   packages: write
+
+env:
+  AGENT: ${{ inputs.agent || 'claudecode' }}
 
 jobs:
   docker:
@@ -38,11 +50,18 @@ jobs:
           context: ./container
           platforms: linux/amd64
           push: true
+          build-args: |
+            AGENT=${{ env.AGENT }}
           tags: ghcr.io/${{ env.IMAGE_OWNER_LC }}/cairn-worker-container:latest
           cache-from: type=registry,ref=ghcr.io/${{ env.IMAGE_OWNER_LC }}/cairn-worker-container:buildcache
           cache-to: type=registry,ref=ghcr.io/${{ env.IMAGE_OWNER_LC }}/cairn-worker-container:buildcache,mode=max
 
-      - name: Smoke test agent CLIs
+      - name: Smoke test agent CLI
         run: |
-          docker run --rm ghcr.io/${{ env.IMAGE_OWNER_LC }}/cairn-worker-container:latest \
-            bash -c 'claude --version && codex --version && pi --version'
+          docker run --rm -e AGENT ghcr.io/${{ env.IMAGE_OWNER_LC }}/cairn-worker-container:latest \
+            bash -c 'case "$AGENT" in
+              claudecode) claude --version ;;
+              codex) codex --version ;;
+              pi) pi --version ;;
+              *) echo "unknown AGENT=$AGENT" >&2; exit 1 ;;
+            esac'
